@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="300">
+    <properties>
+        <property name="LOG_HOME">/logs</property>
+        <property name="RPC_FILE_NAME">server-rpc</property>
+        <property name="METRICS_FILE_NAME">server-metrics</property>
+        <property name="OTHER_FILE_NAME">server-other</property>
+    </properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{24}:%L -[%msg]%n"/>
+        </Console>
+
+        <RollingRandomAccessFile
+                name="rpclog"
+                fileName="${LOG_HOME}/${RPC_FILE_NAME}.log"
+                filePattern="${LOG_HOME}/$${date:yyyy-MM}/${RPC_FILE_NAME}-%d{yyyy-MM-dd}-%i.log">
+
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %c{3}:%L -[%msg]%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="64 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="16"/>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile
+                name="metricslog"
+                fileName="${LOG_HOME}/${METRICS_FILE_NAME}.log"
+                filePattern="${LOG_HOME}/$${date:yyyy-MM}/${METRICS_FILE_NAME}-%d{yyyy-MM-dd}-%i.log">
+
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %c{3}:%L -[%msg]%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="64 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="16"/>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile
+                name="otherlog"
+                fileName="${LOG_HOME}/${OTHER_FILE_NAME}.log"
+                filePattern="${LOG_HOME}/$${date:yyyy-MM}/${OTHER_FILE_NAME}-%d{yyyy-MM-dd}-%i.log">
+
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %c{3}:%L -[%msg]%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="64 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="16"/>
+        </RollingRandomAccessFile>
+
+    </Appenders>
+    <Loggers>
+        <Logger name="com.weiya.server" level="info" additivity="false">
+            <AppenderRef ref="rpclog"/>
+        </Logger>
+        <Logger name="metrics" level="info" additivity="false">
+            <AppenderRef ref="metricslog"/>
+        </Logger>
+        <Logger name="other" level="info" additivity="false">
+            <AppenderRef ref="otherlog"/>
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

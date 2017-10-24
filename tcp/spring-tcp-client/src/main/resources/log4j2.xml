@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="300">
+    <properties>
+        <property name="LOG_HOME">/logs</property>
+        <property name="RPC_FILE_NAME">client-rpc</property>
+        <property name="OTHER_FILE_NAME">client-other</property>
+        <property name="METRICS_FILE_NAME">client-metrics</property>
+    </properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}:%L -[%msg]%n"/>
+        </Console>
+
+        <Console name="metricsConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %msg%n"/>
+        </Console>
+
+        <RollingRandomAccessFile
+                name="tcpinfo"
+                fileName="${LOG_HOME}/${RPC_FILE_NAME}.log"
+                filePattern="${LOG_HOME}/$${date:yyyy-MM}/${RPC_FILE_NAME}-%d{yyyy-MM-dd}-%i.log">
+
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %c{3}:%L -[%msg]%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="64 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="16"/>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile
+                name="othertcpinfo"
+                fileName="${LOG_HOME}/${OTHER_FILE_NAME}.log"
+                filePattern="${LOG_HOME}/$${date:yyyy-MM}/${OTHER_FILE_NAME}-%d{yyyy-MM-dd}-%i.log">
+
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %c{3}:%L -[%msg]%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="64 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="16"/>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile
+                name="metricstcpinfo"
+                fileName="${LOG_HOME}/${METRICS_FILE_NAME}.log"
+                filePattern="${LOG_HOME}/$${date:yyyy-MM}/${METRICS_FILE_NAME}-%d{yyyy-MM-dd}-%i.log">
+
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %c{3}:%L -[%msg]%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="64 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="16"/>
+        </RollingRandomAccessFile>
+
+    </Appenders>
+
+    <Loggers>
+        <Logger name="com.weiya.client" level="info" additivity="false">
+            <AppenderRef ref="tcpinfo"/>
+        </Logger>
+
+        <Logger name="other" level="info" additivity="false">
+            <AppenderRef ref="othertcpinfo"/>
+        </Logger>
+
+        <Logger name="metrics" level="info" additivity="false">
+            <AppenderRef ref="metricstcpinfo"/>
+        </Logger>
+
+        <Logger name="metricsConsole" level="info" additivity="false">
+            <AppenderRef ref="metricsConsole"/>
+        </Logger>
+
+
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
